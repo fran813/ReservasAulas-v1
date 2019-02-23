@@ -7,7 +7,6 @@ import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Permanencia;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Profesor;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Reserva;
-import org.iesalandalus.programacion.utilidades.Entrada;
 import org.iesalandalus.programacion.reservasaulas.modelo.ModeloReservasAulas;
 
 public class IUTextual {
@@ -87,20 +86,13 @@ private ModeloReservasAulas modelo;
 	}
 	public void insertarProfesor() {
 		Consola.mostrarCabecera("Insertar Profesor");
-		Profesor profesor = Consola.leerProfesor();
-		String correo;
-			if (profesor.getNombre().matches(NOMBRE_VALIDO)) { 
-				System.out.print("Escrie un correo valido");
-				correo = Entrada.cadena();
-				if (profesor.getCorreo().matches(CORREO_VALIDO));
-					profesor.setCorreo(correo);
-				try {
+		try {
+			Profesor profesor = Consola.leerProfesor();
 			modelo.insertarProfesor(profesor);			
 			System.out.println("Profesor insertado correctamente.");
 		} catch (OperationNotSupportedException|IllegalArgumentException e) {
 			System.out.println(ERROR + e.getMessage());
 			}
-		}
 	}
 
 	public void borrarProfesor() {
@@ -164,9 +156,10 @@ private ModeloReservasAulas modelo;
         
 		Consola.mostrarCabecera("Borrar reserva");
 		try {
-			Reserva reserva = leerReserva(Consola.leerProfesor());
-			modelo.anularReserva(reserva);
-			System.out.println("Reserva anulada correctamente.");
+			Profesor profesor = new Profesor(NOMBRE_VALIDO, CORREO_VALIDO);
+			Reserva reserva = leerReserva(profesor);
+			modelo.anularReserva(reserva);			
+			System.out.println("Reserva borrada correctamente.");
 		} catch (OperationNotSupportedException|IllegalArgumentException e) {
 			System.out.println(ERROR + e.getMessage());
 		}

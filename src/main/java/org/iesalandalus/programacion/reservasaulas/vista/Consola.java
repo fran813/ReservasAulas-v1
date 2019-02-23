@@ -2,6 +2,8 @@ package org.iesalandalus.programacion.reservasaulas.vista;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.*;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
@@ -51,44 +53,39 @@ public class Consola {
 	}
 	public static Profesor leerProfesor() {
 		
-		System.out.print("Introduce numero de telefono");
-		String telefono = Entrada.cadena();
-		System.out.print("Introduce el correo");
+		String nombre = leerNombreProfesor();
+		System.out.print("Introduce el correo del Profesor: ");
 		String correo = Entrada.cadena();
-		Profesor profesor = new Profesor(leerNombreProfesor(),telefono,correo);
-		return profesor;
+		return new Profesor(nombre, correo);
 	}
 	
 	public static String leerNombreProfesor() {
-		String nombreProfesor;
-		do {
-			System.out.print("Introduce el nombre del profesor: ");
-			nombreProfesor = Entrada.cadena();
-		} while (nombreProfesor.trim().equals(""));
+		
+		System.out.print("Introduce el nombre del Profesor: ");
+		String nombreProfesor = Entrada.cadena();
 		return nombreProfesor;
 	}
+	
 	public static Tramo leerTramo() {
 		int numero = 0;
 		do {
 		System.out.print("Introduce tramo horario");
-		System.out.println("1.Mañana,2.Tarde");
+		System.out.print("1.Mañana, 2.Tarde");
 		numero = Entrada.entero();
-		}while (numero !=1 || numero!=2 );
-		if (numero == 1) {
-			return Tramo.MANANA;
-		}
-		if (numero == 2) {
-			return Tramo.TARDE;
-		}
-		return Tramo.values()[numero];
+		}while (numero<1 && numero>2 );
+		return Tramo.values()[numero - 1];
 	}
 	public static LocalDate leerDia(){
-	     LocalDate fecha=null;
-	        do{
-	        System.out.println("Introduce una fecha con formato dd/mm/aaaa: ");
-	        fecha=LocalDate.parse(Entrada.cadena(), FORMATO_DIA);
-	       }while(fecha!=null);
-	        return fecha;
-	    }
+		LocalDate fecha = null;
+	do {
+		System.out.println("Introduzca una fecha en el formato dd/mm/aaaa.");
+		try {
+			fecha = LocalDate.parse(Entrada.cadena(), FORMATO_DIA);
+		} catch (DateTimeParseException e) {
+			System.out.println("La fecha introducida no está en el formato correcto o no es válida.");
+		}
+	} while (fecha == null);
+	return fecha;
+}
 }
 
